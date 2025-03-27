@@ -17,6 +17,57 @@ using namespace std; /* min */
 // [[Rcpp::depends(RcppArmadillo)]]    
  
 // [[Rcpp::export]]   
+double cl2(arma::vec x, int k){
+
+    int n = x.size();
+    arma::mat A(k+1,2);
+
+    A(0,0) = 1;
+    A(0,1) = 1;
+    for(int i = 0; i < n; i++){
+      if(x[i]<0){
+        for(int j = 1; j < k+1; j++){
+          A(j,0) = A(j,0) + A(j-1,1);
+        }
+        } else {
+        for(int j = 1; j < k+1; j++){
+          A(j,1) = A(j,1) + A(j-1,0);
+        }
+        }
+    }
+    // Rcout << A << std::endl;
+    double res = 0;
+    res = A(k,0) + A(k,1);
+    return(res);
+    } 
+ 
+// [[Rcpp::export]]  
+arma::mat SD2C(arma::mat data, int n, int k){
+// data (n*2)
+
+  arma::vec sgns(n-1,arma::fill::zeros);
+  arma::vec res(n,arma::fill::zeros);
+  for(int i = 0; i<n; i++){
+  arma::vec datax(n,arma::fill::value(arma::datum::inf));
+    for(int j = 0; j<n; j++){
+      if(j!=i){
+        datax(j) = (data(j,1)-data(i,1))/(data(j,0)-data(i,0));
+        }
+    }
+    // if(i==0) Rcout << datax << std::endl;
+    arma::uvec ordr = arma::sort_index(datax, "ascend");
+    for(int j = 0; j<n-1; j++){
+      sgns(j) = data(ordr(j),0) - data(i,0);
+  }
+  // if(i==0) Rcout << sgns << std::endl;
+  res(i) = cl2(sgns, k);
+  }
+  return(res);
+}
+
+ 
+ 
+// [[Rcpp::export]]   
 double cl(NumericVector x){
 
     int k = 3;

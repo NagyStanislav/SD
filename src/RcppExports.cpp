@@ -11,6 +11,31 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// cl2
+double cl2(arma::vec x, int k);
+RcppExport SEXP _SD_cl2(SEXP xSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(cl2(x, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SD2C
+arma::mat SD2C(arma::mat data, int n, int k);
+RcppExport SEXP _SD_SD2C(SEXP dataSEXP, SEXP nSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(SD2C(data, n, k));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cl
 double cl(NumericVector x);
 RcppExport SEXP _SD_cl(SEXP xSEXP) {
@@ -130,6 +155,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_SD_cl2", (DL_FUNC) &_SD_cl2, 2},
+    {"_SD_SD2C", (DL_FUNC) &_SD_SD2C, 3},
     {"_SD_cl", (DL_FUNC) &_SD_cl, 1},
     {"_SD_csample", (DL_FUNC) &_SD_csample, 4},
     {"_SD_fsample", (DL_FUNC) &_SD_fsample, 4},
